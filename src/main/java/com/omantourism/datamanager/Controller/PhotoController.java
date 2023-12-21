@@ -1,46 +1,40 @@
 package com.omantourism.datamanager.Controller;
 
-import com.omantourism.datamanager.Model.photo;
-import com.omantourism.datamanager.Service.PhotoServices;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.io.FileUtils;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.File;
+import java.io.IOException;
+
 @RestController
-@RequestMapping("/api/v1/photos")
+@RequestMapping("/api/v1/photoContent")
 public class PhotoController {
 
-@Autowired
-    PhotoServices photoServices;
+    @GetMapping("/{id}")
+    public ResponseEntity<byte[]> getcontent(@PathVariable String id) throws IOException {
 
-        @GetMapping
-        public List<photo> getallphotos(){
-
-            return photoServices.getallphotos();
-        }
-
-        @PostMapping
-        public photo addphoto(@RequestBody photo incommingphoto){
-
-            return photoServices.addphoto(incommingphoto);
-
-        }
-        @GetMapping(path = "/{photoid}")
-        public  photo getspiciphicphoto (@PathVariable String photoid) {
-
-            return photoServices.getspiciphicphoto(photoid);
-        }
-        @PutMapping("/{photoid}")
-        public photo updatephoto(@PathVariable String photoid,@RequestBody photo incommingphoto){
-
-            return photoServices.updatephoto(photoid,incommingphoto);
-        }
-        @DeleteMapping("/{photoid}")
-        public ResponseEntity<String> removephoto(@PathVariable String photoid){
-        return photoServices.removephoto(photoid);
-        }
+        File mypic = new File("./data/Capture1.PNG");
+        byte[] bytecontent= FileUtils.readFileToByteArray(mypic);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(bytecontent);//status ok thr request is picture and the body the byte so the google know it is picture not any thing
     }
 
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
+        try {
+            // Save the uploaded file to the data directory with a modified filename
+            String filename = id + "_photo";
+            File tmpFile = new File("./data/" + filename);
+            FileUtils.copyInputStreamToFile(file.getInputStream(), tmpFile);
+            // file.transferTo();
+
+            // Respond with a success message or the filename
+            return ResponseEntity.ok("Image uploaded successfully. Filename: " + filename);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error uploading image.");
+        }
+    }
+}
