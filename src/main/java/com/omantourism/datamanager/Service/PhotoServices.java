@@ -1,33 +1,31 @@
-package com.omantourism.datamanager;
+package com.omantourism.datamanager.Service;
 
+import com.omantourism.datamanager.Model.photo;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@RestController
-@RequestMapping("/api/v1/photos")
-public class imagegenerators {
+@Service
+public class PhotoServices {
     CopyOnWriteArrayList<photo> photocolletion =new CopyOnWriteArrayList<>();
 
-    @GetMapping
+
     public List<photo> getallphotos(){
         //photocolletion.add(new photo("we","1","forew","/photod"));
         return photocolletion;
     }
 
-    @PostMapping
-    public photo addphoto(@RequestBody photo incommingphoto){
+
+    public photo addphoto(photo incommingphoto){
         photocolletion.add(incommingphoto);
         return incommingphoto;
 
     }
-    @GetMapping(path = "/{photoid}")
-    public  photo getspiciphicphoto (@PathVariable String photoid) {
+
+    public  photo getspiciphicphoto (String photoid) {
         photo resultphoto = null;
         Optional<photo> foundphoto = photocolletion.stream().filter((currphot) -> {
             return currphot.id.equals(photoid);
@@ -39,9 +37,9 @@ public class imagegenerators {
         }
     return resultphoto;
     }
-    @PutMapping("/{photoid}")
 
-    public photo updatephoto(@PathVariable String photoid,@RequestBody photo incommingphoto){
+
+    public photo updatephoto( String photoid,photo incommingphoto){
         photo foundphoto = getspiciphicphoto(photoid);
 
         foundphoto.lable=incommingphoto.lable;
@@ -50,8 +48,8 @@ public class imagegenerators {
 
         return foundphoto;
     }
-    @DeleteMapping("/{photoid}")
-    public ResponseEntity<String>  removephoto(@PathVariable String photoid){
+
+    public ResponseEntity<String>  removephoto( String photoid){
 
 
         Optional<photo> foundphoto = photocolletion.stream().filter((currphot) -> {

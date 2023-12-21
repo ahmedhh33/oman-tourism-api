@@ -1,4 +1,4 @@
-package com.omantourism.datamanager;
+package com.omantourism.datamanager.Model;
 
 public class photo {
     public  String lable;
