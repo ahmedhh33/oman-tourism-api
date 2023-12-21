@@ -1,6 +1,7 @@
 package com.omantourism.datamanager.Controller;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class PhotoController {
     }
 
 
-    @PostMapping("/upload")
+    @PostMapping()
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
         try {
             // Save the uploaded file to the data directory with a modified filename
@@ -37,4 +38,52 @@ public class PhotoController {
             return ResponseEntity.status(500).body("Error uploading image.");
         }
     }
-}
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<String> deleteImage(@PathVariable String id) {
+            try {
+                // to find file id the the photo
+                String filename = id + "_photo";
+                File fileToDelete = new File("./data/" + filename);
+
+                // Check if the file exists
+                if (fileToDelete.exists()) {
+                    if (fileToDelete.delete()) {
+                        return ResponseEntity.ok("Image deleted successfully. Filename: " + filename);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image.");
+                    }
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image not found for ID: " + id);
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image.");
+            }
+        }
+    @PutMapping("/{id}")
+    public ResponseEntity<String> putImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+        try {
+            String filename = id + "_photo";
+            File existingFile = new File("./data/" + filename);
+
+            // Check if the file exists
+            if (existingFile.exists()) {
+                // Delete the file
+                if (existingFile.delete()) {
+                    // Save the uploaded file with the same filename
+                    FileUtils.copyInputStreamToFile(file.getInputStream(), existingFile);
+
+                    // Respond with a success message or the updated filename
+                    return ResponseEntity.ok("Image updated successfully. Filename: " + filename);
+                } else {
+                    return ResponseEntity.status(500).body("Error updating image.");
+                }
+            } else {
+                return ResponseEntity.status(404).body("Image not found for ID: " + id);
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error updating image.");
+        }
+    }
+
+    }
