@@ -1,6 +1,8 @@
 package com.omantourism.datamanager.Controller;
 
+import com.omantourism.datamanager.Service.PhotoServices;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,77 +15,27 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/photoContent")
 public class PhotoController {
-
+@Autowired
+    PhotoServices photoServices;
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> getcontent(@PathVariable String id) throws IOException {
 
-        File mypic = new File("./data/Capture1.PNG");
-        byte[] bytecontent= FileUtils.readFileToByteArray(mypic);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(bytecontent);//status ok thr request is picture and the body the byte so the google know it is picture not any thing
+        return photoServices.getcontent(id);
     }
 
 
     @PostMapping()
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
-        try {
-            // Save the uploaded file to the data directory with a modified filename
-            String filename = id + "_photo";
-            File tmpFile = new File("./data/" + filename);
-            FileUtils.copyInputStreamToFile(file.getInputStream(), tmpFile);
-            // file.transferTo();
-
-            // Respond with a success message or the filename
-            return ResponseEntity.ok("Image uploaded successfully. Filename: " + filename);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Error uploading image.");
-        }
+       return photoServices.uploadImage(file,id);
     }
 
         @DeleteMapping("/{id}")
         public ResponseEntity<String> deleteImage(@PathVariable String id) {
-            try {
-                // to find file id the the photo
-                String filename = id + "_photo";
-                File fileToDelete = new File("./data/" + filename);
-
-                // Check if the file exists
-                if (fileToDelete.exists()) {
-                    if (fileToDelete.delete()) {
-                        return ResponseEntity.ok("Image deleted successfully. Filename: " + filename);
-                    } else {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image.");
-                    }
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image not found for ID: " + id);
-                }
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image.");
-            }
+           return photoServices.deleteImage(id);
         }
     @PutMapping("/{id}")
     public ResponseEntity<String> putImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
-        try {
-            String filename = id + "_photo";
-            File existingFile = new File("./data/" + filename);
-
-            // Check if the file exists
-            if (existingFile.exists()) {
-                // Delete the file
-                if (existingFile.delete()) {
-                    // Save the uploaded file with the same filename
-                    FileUtils.copyInputStreamToFile(file.getInputStream(), existingFile);
-
-                    // Respond with a success message or the updated filename
-                    return ResponseEntity.ok("Image updated successfully. Filename: " + filename);
-                } else {
-                    return ResponseEntity.status(500).body("Error updating image.");
-                }
-            } else {
-                return ResponseEntity.status(404).body("Image not found for ID: " + id);
-            }
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Error updating image.");
-        }
+        return photoServices.putImage(id,file);
     }
 
     }
