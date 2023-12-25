@@ -44,7 +44,7 @@ public class PhotoInfoServices {
 
         foundphoto.lable=incommingphoto.lable;
         foundphoto.description=incommingphoto.description;
-        foundphoto.path=incommingphoto.path;
+        //foundphoto.path=incommingphoto.path;
 
         return foundphoto;
     }
@@ -59,7 +59,7 @@ public class PhotoInfoServices {
         if (foundphoto.isPresent()) {
 
               photocolletion.remove(foundphoto.get());
-              return ResponseEntity.ok("Photo removed successfully");
+              return ResponseEntity.ok("Photoinfo removed successfully");
         }
         else {
             return ResponseEntity.notFound().build();
