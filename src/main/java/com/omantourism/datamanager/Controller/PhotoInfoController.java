@@ -28,17 +28,17 @@ PhotoInfoServices photoInfoServices;
 
         }
         @GetMapping(path = "/{photoid}")
-        public  photo getspiciphicphoto (@PathVariable String photoid) {
+        public  photo getspiciphicphoto (@PathVariable Integer photoid) {
 
             return photoInfoServices.getspiciphicphoto(photoid);
         }
         @PutMapping("/{photoid}")
-        public photo updatephoto(@PathVariable String photoid,@RequestBody photo incommingphoto){
+        public photo updatephoto(@PathVariable Integer photoid,@RequestBody photo incommingphoto){
 
             return photoInfoServices.updatephoto(photoid,incommingphoto);
         }
         @DeleteMapping("/{photoid}")
-        public ResponseEntity<String> removephoto(@PathVariable String photoid){
+        public ResponseEntity<String> removephoto(@PathVariable Integer photoid){
         return photoInfoServices.removephoto(photoid);
         }
     }

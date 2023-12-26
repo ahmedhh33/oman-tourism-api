@@ -17,7 +17,7 @@ public class PhotoServices<incommingphoto> {
 
     @Autowired
     PhotoInfoServices photoInfoServices;
-    public ResponseEntity<byte[]> getcontent(@PathVariable String id) throws IOException {
+    public ResponseEntity<byte[]> getcontent(@PathVariable Integer id) throws IOException {
 
         File mypic = new File("./data/Capture1.PNG");
         byte[] bytecontent= FileUtils.readFileToByteArray(mypic);
@@ -25,7 +25,7 @@ public class PhotoServices<incommingphoto> {
     }
 
 
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
         try {
             // Save the uploaded file to the data directory with a modified filename
             //String filename = id + "_photo";
@@ -35,7 +35,7 @@ public class PhotoServices<incommingphoto> {
             // file.transferTo();
             photo newphoto = new photo("mycar",id,"mycar in mountans", tmpFile.getPath());
 
-            photoInfoServices.photocolletion.add(newphoto);
+            photoInfoServices.addphoto(newphoto);
             // Respond with a success message or the filename
             return ResponseEntity.ok("Image uploaded successfully"+newphoto);
         } catch (IOException e) {
@@ -43,7 +43,7 @@ public class PhotoServices<incommingphoto> {
         }
     }
 
-    public ResponseEntity<String> deleteImage(@PathVariable String id) {
+    public ResponseEntity<String> deleteImage(@PathVariable Integer id) {
         try {
             // to find file id  the photo
            // String filename = id + "_photo";
@@ -65,7 +65,7 @@ public class PhotoServices<incommingphoto> {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image.");
         }
     }
-    public <phoroinformation> ResponseEntity<String> putImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+    public <phoroinformation> ResponseEntity<String> putImage(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
         try {
             String filename = id + "_photo";
             File existingFile = new File("./data/" + filename);

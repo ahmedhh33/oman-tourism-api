@@ -18,23 +18,23 @@ public class PhotoController {
 @Autowired
     PhotoServices photoServices;
     @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getcontent(@PathVariable String id) throws IOException {
+    public ResponseEntity<byte[]> getcontent(@PathVariable Integer id) throws IOException {
 
         return photoServices.getcontent(id);
     }
 
 
     @PostMapping()
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
        return photoServices.uploadImage(file,id);
     }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<String> deleteImage(@PathVariable String id) {
+        public ResponseEntity<String> deleteImage(@PathVariable Integer id) {
            return photoServices.deleteImage(id);
         }
     @PutMapping("/{id}")
-    public ResponseEntity<String> putImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> putImage(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
         return photoServices.putImage(id,file);
     }
 
