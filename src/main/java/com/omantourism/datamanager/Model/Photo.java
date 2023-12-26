@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class photo {
+public class Photo {
     public  String lable;
     @Id //should come from presistance
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,14 +14,14 @@ public class photo {
     public  String description;
     public  String path;
 
-    public photo() {
+    public Photo() {
     }
 
-    public photo(String lable, String description){
+    public Photo(String lable, String description){
         this.lable = lable;
         this.description = description;
     }
-    public photo(String lable, String description, String path) {
+    public Photo(String lable, String description, String path) {
         this.lable = lable;
         this.description = description;
         this.path = path;

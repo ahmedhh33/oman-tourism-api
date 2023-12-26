@@ -1,6 +1,6 @@
 package com.omantourism.datamanager.Service;
 
-import com.omantourism.datamanager.Model.photo;
+import com.omantourism.datamanager.Model.Photo;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +46,7 @@ public class PhotoServices<incommingphoto> {
     public ResponseEntity<String> uploadImage(@RequestPart("file") MultipartFile file) {
         try {
             // Create a new Photo entity with temporary values
-            photo newPhoto = new photo("mycar", "mycar in mountains");
+            Photo newPhoto = new Photo("mycar", "mycar in mountains");
 
             // Save the new photo to the database to obtain the generated ID
             newPhoto = photoInfoServices.addphoto(newPhoto);

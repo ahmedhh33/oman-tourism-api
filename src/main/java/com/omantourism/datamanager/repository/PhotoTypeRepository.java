@@ -1,9 +1,9 @@
 package com.omantourism.datamanager.repository;
 
-import com.omantourism.datamanager.Model.Photo;
+import com.omantourism.datamanager.Model.PhotoType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PhotoRepository extends JpaRepository<Photo,Integer> {
+public interface PhotoTypeRepository extends JpaRepository<PhotoType,Integer> {
 }
