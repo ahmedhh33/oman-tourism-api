@@ -1,15 +1,11 @@
 package com.omantourism.datamanager.Controller;
 
 import com.omantourism.datamanager.Service.PhotoServices;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 
 @RestController
@@ -25,8 +21,8 @@ public class PhotoController {
 
 
     @PostMapping()
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
-       return photoServices.uploadImage(file,id);
+    public ResponseEntity uploadImage(@RequestParam("file") MultipartFile file) {
+       return photoServices.uploadImage(file);
     }
 
         @DeleteMapping("/{id}")

@@ -25,19 +25,46 @@ public class PhotoServices<incommingphoto> {
     }
 
 
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
+//    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
+//        try {
+//            // Save the uploaded file to the data directory with a modified filename
+//            //String filename = id + "_photo";
+//            File tmpFile = new File("%s/%s.%s".formatted("./data",id,"jpg"));
+//
+//            FileUtils.copyInputStreamToFile(file.getInputStream(), tmpFile);
+//            // file.transferTo();
+//            photo newphoto = new photo("mycar",id,"mycar in mountans", tmpFile.getPath());
+//
+//            photoInfoServices.addphoto(newphoto);
+//            // Respond with a success message or the filename
+//            return ResponseEntity.ok("Image uploaded successfully"+newphoto);
+//        } catch (IOException e) {
+//            return ResponseEntity.status(500).body("Error uploading image.");
+//        }
+//    }
+
+    public ResponseEntity<String> uploadImage(@RequestPart("file") MultipartFile file) {
         try {
-            // Save the uploaded file to the data directory with a modified filename
-            //String filename = id + "_photo";
-            File tmpFile = new File("%s/%s.%s".formatted("./data",id,"jpg"));
+            // Create a new Photo entity with temporary values
+            photo newPhoto = new photo("mycar", "mycar in mountains");
 
+            // Save the new photo to the database to obtain the generated ID
+            newPhoto = photoInfoServices.addphoto(newPhoto);
+
+            // Use the generated ID to construct the file name
+            String fileName = String.format("%d.jpg",  newPhoto.getId());
+
+            // Save the uploaded file to the data directory with the constructed filename
+            File tmpFile = new File("./data", fileName);
             FileUtils.copyInputStreamToFile(file.getInputStream(), tmpFile);
-            // file.transferTo();
-            photo newphoto = new photo("mycar",id,"mycar in mountans", tmpFile.getPath());
 
-            photoInfoServices.addphoto(newphoto);
-            // Respond with a success message or the filename
-            return ResponseEntity.ok("Image uploaded successfully"+newphoto);
+            // Update the Photo entity with the actual file name
+            newPhoto.setPath(tmpFile.getPath());
+            photoInfoServices.updatephoto(newPhoto.getId(),newPhoto);
+
+            // Respond with a success message or additional information
+            return ResponseEntity.ok("Image uploaded successfully. Photo ID: " + newPhoto.getId());
+
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error uploading image.");
         }
@@ -48,7 +75,7 @@ public class PhotoServices<incommingphoto> {
             // to find file id  the photo
            // String filename = id + "_photo";
             //File fileToDelete = new File("./data/" + filename);
-            File fileToDelete = new File("%s/%s.%s".formatted("./data",id,"jpg"));
+            File fileToDelete = new File("%s/%d.%s".formatted("./data",id,"jpg"));
             // Check if the file exists
             if (fileToDelete.exists()) {
                 //FileUtils.delete()
@@ -62,13 +89,13 @@ public class PhotoServices<incommingphoto> {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image not found for ID: " + id);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image tttt.");
         }
     }
     public <phoroinformation> ResponseEntity<String> putImage(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
         try {
-            String filename = id + "_photo";
-            File existingFile = new File("./data/" + filename);
+            String filename = id + ".jpg";
+            File existingFile = new File("%s/%d.%s".formatted("./data",id,"jpg"));
 
             // Check if the file exists
             if (existingFile.exists()) {

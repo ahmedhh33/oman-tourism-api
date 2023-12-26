@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class PhotoInfoServices {
-    CopyOnWriteArrayList<photo> photocolletion =new CopyOnWriteArrayList<>();
+    //CopyOnWriteArrayList<photo> photocolletion =new CopyOnWriteArrayList<>();
     @Autowired
     public PhotoRepository photoRepository;
     public List<photo> getallphotos(){
@@ -53,11 +53,10 @@ public class PhotoInfoServices {
 
     public photo updatephoto( Integer photoid,photo incommingphoto){
         photo foundphoto = getspiciphicphoto(photoid);
-
         foundphoto.lable=incommingphoto.lable;
         foundphoto.description=incommingphoto.description;
-        //foundphoto.path=incommingphoto.path;
-
+        foundphoto.path=incommingphoto.path;
+        photoRepository.save(incommingphoto);
         return foundphoto;
     }
 
