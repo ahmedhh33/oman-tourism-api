@@ -1,9 +1,6 @@
 package com.omantourism.datamanager.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class PhotoType {
@@ -19,4 +16,7 @@ public class PhotoType {
     public void setType(String type) {
         Type = type;
     }
+
+    @OneToOne(mappedBy = "photoType")
+    public Photo photo;
 }
