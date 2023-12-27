@@ -26,8 +26,7 @@ public class PhotoTypeServices {
     }
 
     public PhotoType AddPhotoType(PhotoType incommingphototype){
-        photoTypeRepository.save(incommingphototype);
-        return incommingphototype;
+        return photoTypeRepository.save(incommingphototype);
     }
 
     public PhotoType UpdatePhotoType(Integer id, PhotoType incommingphototype) {

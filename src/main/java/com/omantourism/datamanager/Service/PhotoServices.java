@@ -60,7 +60,7 @@ public class PhotoServices<incommingphoto> {
 
             // Update the Photo entity with the actual file name
             newPhoto.setPath(tmpFile.getPath());
-            photoInfoServices.updatephoto(newPhoto.getId(),newPhoto);
+            photoInfoServices.updatephotoS(newPhoto.getId(),newPhoto);
 
             // Respond with a success message or additional information
             return ResponseEntity.ok("Image uploaded successfully. Photo ID: " + newPhoto.getId());

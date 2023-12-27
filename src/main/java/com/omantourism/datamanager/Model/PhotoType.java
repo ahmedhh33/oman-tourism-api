@@ -1,5 +1,6 @@
 package com.omantourism.datamanager.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,16 +8,25 @@ public class PhotoType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
-    public  String Type;
+    private String type;
 
     public String getType() {
-        return Type;
+        return type;
     }
 
     public void setType(String type) {
-        Type = type;
+        this.type = type;
+    }
+
+    public PhotoType() {
+    }
+
+    public PhotoType(int id, String type) {
+        this.id = id;
+        this.type = type;
     }
 
     @OneToOne(mappedBy = "photoType")
+    @JsonIgnore
     public Photo photo;
 }

@@ -1,6 +1,7 @@
 package com.omantourism.datamanager.Controller;
 
 import com.omantourism.datamanager.Model.Photo;
+import com.omantourism.datamanager.Model.PhotowithType;
 import com.omantourism.datamanager.Service.PhotoInfoServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,6 @@ PhotoInfoServices photoInfoServices;
 
         @PostMapping
         public Photo addphoto(@RequestBody Photo incommingphoto){
-
             return photoInfoServices.addphoto(incommingphoto);
 
         }
@@ -33,9 +33,8 @@ PhotoInfoServices photoInfoServices;
             return photoInfoServices.getspiciphicphoto(photoid);
         }
         @PutMapping("/{photoid}")
-        public Photo updatephoto(@PathVariable Integer photoid, @RequestBody Photo incommingphoto){
-
-            return photoInfoServices.updatephoto(photoid,incommingphoto);
+        public Photo updatephoto(@PathVariable Integer photoid, @RequestBody PhotowithType photowithType){
+            return photoInfoServices.updatephoto(photoid,photowithType);
         }
         @DeleteMapping("/{photoid}")
         public ResponseEntity<String> removephoto(@PathVariable Integer photoid){

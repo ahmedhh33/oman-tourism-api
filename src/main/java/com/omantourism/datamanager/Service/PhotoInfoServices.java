@@ -1,11 +1,14 @@
 package com.omantourism.datamanager.Service;
 
 import com.omantourism.datamanager.Model.Photo;
+import com.omantourism.datamanager.Model.PhotowithType;
 import com.omantourism.datamanager.repository.PhotoRepository;
+import com.omantourism.datamanager.repository.PhotoTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -16,6 +19,8 @@ public class PhotoInfoServices {
     //CopyOnWriteArrayList<photo> photocolletion =new CopyOnWriteArrayList<>();
     @Autowired
     public PhotoRepository photoRepository;
+    @Autowired
+    public PhotoTypeRepository photoTypeRepository;
     public List<Photo> getallphotos(){
         //photocolletion.add(new photo("we","1","forew","/photod"));
         //return photocolletion;
@@ -49,14 +54,26 @@ public class PhotoInfoServices {
         );
     }
 
-
-    public Photo updatephoto(Integer photoid, Photo incommingphoto){
+    public Photo updatephotoS(Integer photoid, Photo incommingphoto){
         Photo foundphoto = getspiciphicphoto(photoid);
         foundphoto.lable=incommingphoto.lable;
         foundphoto.description=incommingphoto.description;
         foundphoto.path=incommingphoto.path;
         photoRepository.save(foundphoto);
         return foundphoto;
+    }
+
+
+
+
+
+    public Photo updatephoto(Integer photoid, @RequestBody PhotowithType photowithType){
+        Photo foundphoto = getspiciphicphoto(photoid);
+        foundphoto.lable=photowithType.photo.lable;
+        foundphoto.description=photowithType.photo.description;
+        foundphoto.photoType = photoTypeRepository.findById(photowithType.photoTypeId).get();
+
+        return photoRepository.save(foundphoto);
     }
 
     public ResponseEntity<String>  removephoto( Integer photoid){
