@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PhotoInfoServices {
@@ -71,7 +72,12 @@ public class PhotoInfoServices {
         Photo foundphoto = getspiciphicphoto(photoid);
         foundphoto.lable=photowithType.photo.lable;
         foundphoto.description=photowithType.photo.description;
-        foundphoto.photoType = photoTypeRepository.findById(photowithType.photoTypeId).get();
+        //foundphoto.photoType = photoTypeRepository.findById(photowithType.photoTypeId).get();
+        foundphoto.photoTypes = photoTypeRepository.findAll().stream().filter((currentphoto) ->
+        {
+            return photowithType.photoTypeId.contains(currentphoto.id);
+        }).collect(Collectors.toSet());
+
 
         return photoRepository.save(foundphoto);
     }

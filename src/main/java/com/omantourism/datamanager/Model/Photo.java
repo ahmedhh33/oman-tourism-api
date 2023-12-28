@@ -3,6 +3,8 @@ package com.omantourism.datamanager.Model;
 import jakarta.persistence.*;
 import org.hibernate.engine.internal.Cascade;
 
+import java.util.Set;
+
 @Entity
 public class Photo {
     public  String lable;
@@ -32,8 +34,13 @@ public class Photo {
         this.path = path;
     }
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "PHOTO_TYPE_ID",referencedColumnName = "id")
-    public PhotoType photoType;
+    //@OneToOne(cascade = CascadeType.PERSIST)
+    //@JoinColumn(name = "PHOTO_TYPE_ID",referencedColumnName = "id")
+
+    @ManyToMany
+    @JoinTable(name = "photoinfo_phototype_type",
+    joinColumns = @JoinColumn(name = "photoinfo_id"),
+    inverseJoinColumns = @JoinColumn(name = "phototype_id"))
+    public Set<PhotoType> photoTypes;
 
 }
