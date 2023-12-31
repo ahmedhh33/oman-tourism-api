@@ -2,6 +2,7 @@ package com.omantourism.datamanager.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Set;
 
@@ -10,6 +11,7 @@ public class PhotoType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
+    @Pattern(regexp = "^[A-Z|a-z]+$")
     private String type;
 
     public String getType() {

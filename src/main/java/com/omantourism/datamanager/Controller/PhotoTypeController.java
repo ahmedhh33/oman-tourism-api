@@ -2,6 +2,7 @@ package com.omantourism.datamanager.Controller;
 
 import com.omantourism.datamanager.Model.PhotoType;
 import com.omantourism.datamanager.Service.PhotoTypeServices;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class PhotoTypeController {
         return photoTypeServices.GetPhotoTypeById(id);
     }
     @PostMapping
-    public PhotoType AddPhotoType(@RequestBody PhotoType incommingphototype){
+    public PhotoType AddPhotoType(@Valid @RequestBody PhotoType incommingphototype){
         return photoTypeServices.AddPhotoType(incommingphototype);
     }
     @PutMapping("/{id}")
